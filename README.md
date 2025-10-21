@@ -1,2 +1,1 @@
-# MandereLibDocs
-Документация для MandereLib
+Нет смысла читать LOL 
