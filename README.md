@@ -1,0 +1,2 @@
+# MandereLibDocs
+Документация для MandereLib
