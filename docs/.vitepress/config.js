@@ -40,6 +40,14 @@ export default {
             { text: 'Локализация', link: '/guide/localization' },
             { text: 'Deep Linking', link: '/guide/deep-linking' }
           ]
+        },
+        {
+          text: 'Управление устройством',
+          items: [
+            { text: 'Отправка файлов', link: '/guide/share' },
+            { text: 'Информация об устройстве', link: '/guide/device' },
+            { text: 'Системные уведомления', link: '/guide/notifications' }
+          ]
         }
       ],
       '/api/': [
@@ -51,7 +59,10 @@ export default {
             { text: 'MandreData', link: '/api/mandre-data' },
             { text: 'MandreUI', link: '/api/mandre-ui' },
             { text: 'MandreTTS', link: '/api/mandre-tts' },
-            { text: 'MandreAuth', link: '/api/mandre-auth' }
+            { text: 'MandreAuth', link: '/api/mandre-auth' },
+            { text: 'MandreShare', link: '/api/mandre-share' },
+            { text: 'MandreDevice', link: '/api/mandre-device' },
+            { text: 'MandreNotification', link: '/api/mandre-notification' }
           ]
         }
       ],

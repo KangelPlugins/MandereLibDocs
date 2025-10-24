@@ -64,22 +64,55 @@ MandreLib состоит из нескольких модулей, каждый 
 
 [Подробнее →](/api/mandre-auth)
 
+### MandreShare (Отправка файлов) 
+
+Модуль для отправки текста и файлов:
+
+- `share_text()` - отправить текст
+- `share_file()` - отправить файл
+
+[Подробнее →](/api/mandre-share)
+
+### MandreDevice (Информация об устройстве) 
+
+Модуль для получения информации об устройстве:
+
+- `get_device_info()` - полная информация
+- `get_simple_info()` - краткая информация
+
+[Подробнее →](/api/mandre-device)
+
+### MandreNotification (Системные уведомления)
+
+Модуль для показа системных уведомлений:
+
+- `show_simple()` - простое уведомление
+- `show_dialog()` - уведомление в стиле диалога
+
+[Подробнее →](/api/mandre-notification)
+
 ## Быстрый старт
 
 ```python
-from mandre_lib import Mandre, MandreData, MandreUI, MandreTTS, MandreAuth
-from base_plugin import BasePlugin
+from mandre_lib import Mandre, MandreData, MandreUI
+from base_plugin import BasePlugin, HookResult, HookStrategy
 
 class MyPlugin(BasePlugin):
     def on_plugin_load(self):
         # Активация хранилища
         Mandre.use_persistent_storage(self)
+        self.add_on_send_message_hook()
         
-        # Регистрация команды
+        # Регистрация команд
         Mandre.register_command(self, "hello", self.cmd_hello)
+        Mandre.register_command(self, "device", self.cmd_device)
+        Mandre.register_command(self, "notify", self.cmd_notify)
         
         # Планирование задачи
         Mandre.schedule_task(self, "task", 60, self.periodic_task)
+    
+    def on_send_message_hook(self, params):
+        return Mandre.handle_outgoing_command(params) or HookResult()
     
     def cmd_hello(self, plugin, args, params):
         MandreUI.show(
@@ -87,7 +120,18 @@ class MyPlugin(BasePlugin):
             items=["Вариант 1", "Вариант 2"],
             on_select=lambda i, t: self.log(f"Выбрано: {t}")
         )
-        return None
+        return HookResult(strategy=HookStrategy.CANCEL)
+    
+    def cmd_device(self, plugin, args, params):
+        # Новое в 1.6.3: информация об устройстве
+        info = Mandre.Device.get_simple_info()
+        params["message"] = f"📱 {info}"
+        return HookResult(strategy=HookStrategy.MODIFY, params=params)
+    
+    def cmd_notify(self, plugin, args, params):
+        # Новое в 1.6.3: системные уведомления
+        Mandre.Notification.show_simple("Плагин", args or "Тест!")
+        return HookResult(strategy=HookStrategy.CANCEL)
     
     def periodic_task(self):
         self.log("Задача выполнена")
@@ -317,3 +361,6 @@ MandreLib следует [Semantic Versioning](https://semver.org/):
 - [MandreUI](/api/mandre-ui) - UI компоненты
 - [MandreTTS](/api/mandre-tts) - текст-в-речь
 - [MandreAuth](/api/mandre-auth) - аутентификация
+- [MandreShare](/api/mandre-share) - отправка файлов 
+- [MandreDevice](/api/mandre-device) - информация об устройстве 
+- [MandreNotification](/api/mandre-notification) - системные уведомления 
