@@ -27,6 +27,8 @@ export default {
           text: 'Основные возможности',
           items: [
             { text: 'Хранилище данных', link: '/guide/storage' },
+            { text: 'SQL KV-хелперы', link: '/guide/sql-kv' },
+            { text: 'Синтетические каналы', link: '/guide/synthetic-channels' },
             { text: 'UI компоненты', link: '/guide/ui' },
             { text: 'Команды', link: '/guide/commands' },
             { text: 'Планировщик задач', link: '/guide/scheduler' }
