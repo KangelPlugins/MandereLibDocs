@@ -40,7 +40,9 @@ export default {
             { text: 'Текст-в-речь', link: '/guide/tts' },
             { text: 'Аутентификация', link: '/guide/auth' },
             { text: 'Локализация', link: '/guide/localization' },
-            { text: 'Deep Linking', link: '/guide/deep-linking' }
+            { text: 'Deep Linking', link: '/guide/deep-linking' },
+            { text: 'PIP-менеджер', link: '/guide/pip' },
+            { text: 'Веб-рендеринг', link: '/guide/web' }
           ]
         },
         {

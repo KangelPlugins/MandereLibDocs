@@ -258,6 +258,48 @@ Thread(target=lambda: background_task(self)).start()
        history = history[-1000:]  # Оставляем последние 1000
    ```
 
+## Экспорт и импорт данных плагина (ZIP)
+
+Экспортируйте все файлы плагина в ZIP-архив и импортируйте их обратно при необходимости (резервное копирование/перенос).
+
+```python
+from datetime import datetime
+import zipfile, os
+from android.os import Environment
+
+def export_plugin_data(self):
+    downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+    ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+    zip_name = f"mandrelib_data_{self.id}_{ts}.zip"
+    zip_path = os.path.join(downloads.getAbsolutePath(), zip_name)
+
+    with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zf:
+        for filename in MandreData.list_files_for_plugin(self.id):
+            file_path = MandreData.get_persistent_path(self.id, filename)
+            zf.write(file_path, arcname=filename)
+
+    BulletinHelper.show_success(f"Данные экспортированы в Downloads/{zip_name}")
+
+def import_plugin_data(self, zip_path):
+    # Полная очистка данных плагина
+    MandreData.delete_persistent_plugin_data(self.id)
+
+    # Целевая директория хранения данных плагина
+    target_dir = File(MandreData._get_base_data_dir(), self.id)
+    if not target_dir.exists():
+        target_dir.mkdirs()
+
+    with zipfile.ZipFile(zip_path, 'r') as zf:
+        zf.extractall(target_dir.getAbsolutePath())
+
+    BulletinHelper.show_success("Данные импортированы")
+```
+
+::: warning Важно
+- Перед импортом убедитесь, что архив доверенный.
+- Импорт перезапишет текущие данные плагина.
+:::
+
 ## Следующие шаги
 
 - [UI компоненты](/guide/ui) - создание интерфейса

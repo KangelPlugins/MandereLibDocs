@@ -276,6 +276,52 @@ def share_if_exists(self, file_path):
         BulletinHelper.show_error("Файл не найден")
 ```
 
+## Прямая отправка в чат (MandreSend)
+
+Если нужно отправить изображение/файл непосредственно в текущий чат без системного диалога «Поделиться», используйте `MandreSend`:
+
+```python
+def send_image_directly(self, image_path: str):
+    # Отправить PNG изображение напрямую в текущий чат
+    MandreSend.png(image_path, "📸 Изображение из плагина")
+```
+
+### Пример: сгенерировать картинку из HTML и отправить
+
+```python
+def create_and_send_chart(self):
+    html = """
+    <canvas id=\"myChart\" width=\"400\" height=\"200\"></canvas>
+    <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>
+    <script>
+      const ctx = document.getElementById('myChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май'],
+          datasets: [{
+            label: 'Продажи',
+            data: [65, 59, 80, 81, 56],
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1
+          }]
+        }
+      });
+    </script>
+    """
+
+    def on_ready(success, path):
+        if success:
+            MandreSend.png(path, "📈 График продаж")
+
+    MandreWeb.render_html_to_png(html, on_ready)
+```
+
+::: tip Когда использовать
+- `MandreShare` — если нужно дать пользователю выбрать приложение для шаринга.
+- `MandreSend` — если нужно отправить контент сразу в текущий чат, без взаимодействия.
+:::
+
 ## См. также
 
 - [MandreShare API](/api/mandre-share) - полная справка
